@@ -1,0 +1,94 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.community-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #ff8c00, #ff2e63);
+  
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.streak-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.fire-icon {
+  font-size: 3rem;
+  animation: flame 1s infinite alternate;
+}
+
+@keyframes flame {
+  from { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+.progress-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8c00, #ff2e63);
+  transition: width 0.3s ease;
+}
+
+.achievements {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 60px);
+  gap: 15px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.badge {
+  background: rgba(255,255,255,0.15);
+  padding: 15px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.badge:hover {
+  transform: scale(1.2);
+  background: rgba(255,255,255,0.3);
+}

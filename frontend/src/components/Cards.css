@@ -1,0 +1,83 @@
+/* src/components/Cards.css */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px; /* slightly more space between cards */
+  margin-top: 20px;
+}
+
+.hc-card {
+  background: #f5f5f5; /* updated background color */
+  padding: 24px; /* increased padding */
+  border-radius: 16px; /* slightly more rounded corners */
+  box-shadow: 0 12px 36px rgb(78, 133, 199);
+  transform-origin: center;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  animation: fadeUp 820ms ease both;
+  border: 1px solid rgba(12, 20, 30, 0.03);
+  max-width: 320px; /* adjust as per your need */
+  margin: 0 auto;
+}
+
+.hc-card:hover {
+  transform: translateY(-10px) scale(1.04); /* slightly larger hover scale */
+  box-shadow: 0 20px 48px rgba(0, 9, 20, 0.12);
+  cursor: pointer;
+}
+
+.hc-card h3 {
+  margin: 8px 0;
+  font-size: 20px; /* bigger title text */
+}
+
+.hc-card p {
+  color: #475569;
+  margin: 0;
+  font-size: 16px; /* bigger paragraph text */
+}
+
+.hc-card-emoji {
+  width: 64px; /* bigger icon box */
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e1e8e7, #e9f8f4);
+  font-size: 28px; /* bigger emoji size */
+  box-shadow: 0 10px 20px rgba(30, 80, 60, 0.08);
+}
+
+/* appear animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* responsive */
+@media (max-width: 1100px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .hc-card {
+    padding: 16px; /* slightly reduced for mobile */
+  }
+  .hc-card-emoji {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+}
