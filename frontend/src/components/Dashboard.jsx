@@ -23,8 +23,8 @@ export default function Dashboard() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Login to save your health data");
-      navigate("/");
+      toast.error("Please login to save your health data");
+      navigate("/?login=true"); // 👈 Redirect with query param
       return;
     }
 
@@ -40,7 +40,7 @@ export default function Dashboard() {
 
       const data = await res.json();
       toast.success(data.message);
-      navigate('/')
+      navigate("/");
       setFormData({
         bloodPressure: "",
         bloodSugar: "",

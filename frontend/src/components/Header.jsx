@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Header.css";
 import { toast } from "react-toastify";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const languages = ["English", "Hindi", "Kannada", "Tamil", "Telugu"];
   const [lang, setLang] = useState("English");
@@ -24,6 +25,14 @@ export default function Header() {
       setUserEmail(email);
     }
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("login") === "true") {
+      setAuthMode("login");
+      setAuthOpen(true);
+    }
+  }, [location]);
 
   const openAuth = (mode) => {
     setAuthMode(mode);
@@ -77,6 +86,7 @@ export default function Header() {
   return (
     <>
       <header className="hc-header">
+        {/* Logo */}
         <div className="hc-left">
           <div className="hc-logo" aria-hidden>
             <span className="hc-logo-leaf">🍃</span>
@@ -84,20 +94,28 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Navigation */}
         <nav className="hc-nav" aria-label="Main navigation">
           <Link to="/" title="Home" className="hc-icon">🏠</Link>
           <Link to="/profile" title="Profile" className="hc-icon">👤</Link>
-          <Link to="/Dashboard" title="Dashboard" className="hc-icon">📊</Link>
+          <Link to="/dashboard" title="Dashboard" className="hc-icon">📊</Link>
           <button className="hc-icon" title="Notifications">🔔</button>
         </nav>
 
+        {/* Language + Auth */}
         <div className="hc-right">
           <div className="hc-lang" onClick={() => setLangOpen(!langOpen)}>
             <span>{lang}</span>
             {langOpen && (
               <ul className="hc-lang-list">
                 {languages.map((L) => (
-                  <li key={L} onClick={() => { setLang(L); setLangOpen(false); }}>
+                  <li
+                    key={L}
+                    onClick={() => {
+                      setLang(L);
+                      setLangOpen(false);
+                    }}
+                  >
                     {L}
                   </li>
                 ))}
@@ -107,7 +125,7 @@ export default function Header() {
 
           {isLoggedIn ? (
             <>
-              <span className="mr-3">Hello, {userEmail} 👋</span>
+              <span className="hc-user">Hello, {userEmail} 👋</span>
               <button className="hc-btn hc-login" onClick={handleLogout}>
                 Logout
               </button>
@@ -125,6 +143,7 @@ export default function Header() {
         </div>
       </header>
 
+      {/* Auth Modal */}
       {authOpen && (
         <div className="hc-modal" role="dialog" aria-modal="true">
           <div className="hc-modal-backdrop" onClick={() => setAuthOpen(false)} />

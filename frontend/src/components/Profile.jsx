@@ -27,11 +27,10 @@ export default function ProfileForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // redirect to login if user is not logged in
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Please login to save your profile");
-      navigate("/");
+      navigate("/?login=true"); // 👈 Redirect with query param
       return;
     }
 
