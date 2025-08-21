@@ -7,6 +7,12 @@ import Profile from "./components/Profile";
 import Dashboard from "./components/Dashboard";
 import Chatbot from "./components/Chatbot";
 import { ToastContainer } from "react-toastify";
+import About from "./pages/About"; 
+import Help from "./pages/Help";  
+import Careers from "./pages/Careers";
+import Contact from "./pages/Contact"; 
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms"; 
 
 
 function App() {
@@ -20,7 +26,16 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/Dashboard" element={<Dashboard/>}/>
           <Route path="/ExploreFeatures" element={<Chatbot/>}/>
+
           <Route path="/Chatbot" element={<Chatbot/>}/>
+
+          <Route path="/about" element={<About />} />
+          <Route path="/help" element={<Help />} /> 
+          <Route path="/careers" element={<Careers />} /> 
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} /> 
+
         </Routes>
         <Footer />
       </div>
