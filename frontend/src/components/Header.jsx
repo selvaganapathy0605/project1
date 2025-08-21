@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Header.css";
 import { toast } from "react-toastify";
+import favicon from "../assets/favicon.ico"; // or favicon.ico
+
+<img src={favicon} alt="Favicon" />
+
+
 
 export default function Header() {
   const navigate = useNavigate();
@@ -89,18 +94,21 @@ export default function Header() {
         {/* Logo */}
         <div className="hc-left">
           <div className="hc-logo" aria-hidden>
-            <span className="hc-logo-leaf">🍃</span>
+            <img className="w-6 h-6 mr-2" src={favicon} alt="fav" />
             <span className="hc-logo-text">WellCompanion</span>
           </div>
         </div>
 
+       
         {/* Navigation */}
         <nav className="hc-nav" aria-label="Main navigation">
           <Link to="/" title="Home" className="hc-icon">🏠</Link>
           <Link to="/profile" title="Profile" className="hc-icon">👤</Link>
           <Link to="/dashboard" title="Dashboard" className="hc-icon">📊</Link>
           <button className="hc-icon" title="Notifications">🔔</button>
+          <Link to="/Chatbot" title="Chatbot" className="hc-icon">🤖</Link> 
         </nav>
+
 
         {/* Language + Auth */}
         <div className="hc-right">
