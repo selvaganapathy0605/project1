@@ -17,10 +17,10 @@ export default function LandingPage() {
               <strong>Your personalized health companion — smarter habits, healthier life.</strong>
             </h1>
             <div className="hero-cta">
-              <Link to="/ExploreFeatures" title="Explore Features"
+              <Link to="/ExploreFeatures " title="Explore Features "
                 className="px-4 py-2 border border-green-500 text-blue-500 rounded hover:bg-green-500 hover:text-white transition"
               >
-                Explore Features
+                Explore Features 🤖
               </Link>
             </div>
             <div className="hero-icons">

@@ -13,17 +13,7 @@ export default function Footer() {
             Personalized health — simple, private, actionable.
           </p>
         </div>
-
-        {/* Product */}
-        <div className="fc-col">
-          <h4>Product</h4>
-          <ul>
-            <li><a href="/features">Features</a></li>
-            <li><a href="/pricing">Pricing</a></li>
-            <li><a href="/integrations">Integrations</a></li>
-          </ul>
-        </div>
-
+        
         {/* Company */}
         <div className="fc-col">
           <h4>Company</h4>
