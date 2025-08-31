@@ -35,7 +35,7 @@ export default function ProfileForm() {
     }
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/profile`, {
+      const res = await fetch(`https://wellcompanion-backend.onrender.com/api/profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

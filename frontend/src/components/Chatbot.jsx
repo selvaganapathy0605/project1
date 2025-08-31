@@ -11,7 +11,7 @@ export default function Chatbot() {
   useEffect(() => {
     if (user && user._id) {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/chat/${user._id}`)
+        .get(`https://wellcompanion-backend.onrender.com/api/chat/${user._id}`)
         .then((res) =>
           setChatHistory(
             res.data
@@ -37,7 +37,7 @@ export default function Chatbot() {
     setChatHistory((prev) => [...prev, userMsg]);
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/chat/ask`, {
+      const res = await axios.post(`https://wellcompanion-backend.onrender.com/api/chat/ask`, {
         userId: user ? user._id : null,
         disease: input,
       });

@@ -8,7 +8,7 @@ export default function Notifications({ token }) {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/notifications`, {
+        const res = await axios.get(`https://wellcompanion-backend.onrender.com/api/notifications`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setNotifications(res.data);
@@ -25,7 +25,7 @@ export default function Notifications({ token }) {
   const markAsRead = async (id) => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/notifications/${id}/read`,
+        `https://wellcompanion-backend.onrender.com/api/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -39,7 +39,7 @@ export default function Notifications({ token }) {
   
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/notifications/${id}`, {
+      await axios.delete(`https://wellcompanion-backend.onrender.com/api/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications((prev) => prev.filter((n) => n._id !== id));

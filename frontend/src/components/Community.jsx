@@ -12,7 +12,7 @@ export default function Community() {
   const fetchPosts = useCallback(async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/community`,
+        `https://wellcompanion-backend.onrender.com/api/community`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -33,7 +33,7 @@ export default function Community() {
     if (!formData.title || !formData.body) return;
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/community`, formData, {
+      await axios.post(`https://wellcompanion-backend.onrender.com/api/community`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormData({ title: "", body: "", tags: "" });
@@ -48,7 +48,7 @@ export default function Community() {
   const handleLike = async (postId) => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/community/${postId}/like`,
+        `https://wellcompanion-backend.onrender.com/api/community/${postId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

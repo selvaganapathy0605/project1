@@ -39,7 +39,7 @@ export default function Dashboard() {
       if (!token) return;
 
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/healthdata`, {
+        const res = await fetch(`https://wellcompanion-backend.onrender.com/api/healthdata`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export default function Dashboard() {
     }
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/healthdata`, {
+      const res = await fetch(`https://wellcompanion-backend.onrender.com/api/healthdata`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

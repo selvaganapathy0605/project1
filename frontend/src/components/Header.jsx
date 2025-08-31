@@ -41,8 +41,8 @@ export default function Header() {
     try {
       const url =
         authMode === "login"
-          ? `${process.env.REACT_APP_API_URL}/auth/login`
-          : `${process.env.REACT_APP_API_URL}/auth/register`;
+          ? `https://wellcompanion-backend.onrender.com/api/auth/login`
+          : `https://wellcompanion-backend.onrender.com/api/auth/register`;
 
       const bodyData =
         authMode === "login"
