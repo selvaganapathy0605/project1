@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function Help() {
   return (
-    <div className="wc-page">
+    <div className="wc-page main-page">
       <h1>Help Center</h1>
       <p>
         Welcome to the WellCompanion Help Center! Here you’ll find answers to

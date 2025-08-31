@@ -4,30 +4,22 @@ import "./Header.css";
 import { toast } from "react-toastify";
 import favicon from "../assets/favicon.ico"; // or favicon.ico
 
-<img src={favicon} alt="Favicon" />
-
-
-
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const languages = ["English", "Hindi", "Kannada", "Tamil", "Telugu"];
-  const [lang, setLang] = useState("English");
-  const [langOpen, setLangOpen] = useState(false);
-
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-      const email = localStorage.getItem("userEmail");
-      setUserEmail(email);
+      const savedName = localStorage.getItem("userName");
+      setUserName(savedName);
     }
   }, []);
 
@@ -49,13 +41,18 @@ export default function Header() {
     try {
       const url =
         authMode === "login"
-          ? "http://localhost:5000/api/auth/login"
-          : "http://localhost:5000/api/auth/register";
+          ? `${process.env.REACT_APP_API_URL}/auth/login`
+          : `${process.env.REACT_APP_API_URL}/auth/register`;
+
+      const bodyData =
+        authMode === "login"
+          ? { email: form.email, password: form.password }
+          : { name: form.name, email: form.email, password: form.password };
 
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(bodyData),
       });
 
       const data = await res.json();
@@ -63,12 +60,12 @@ export default function Header() {
       if (res.ok) {
         if (authMode === "login") {
           localStorage.setItem("token", data.token);
-          localStorage.setItem("userEmail", form.email);
-          setUserEmail(form.email);
+          localStorage.setItem("userName", data.user?.name || form.email);
+          setUserName(data.user?.name || form.email);
           setIsLoggedIn(true);
           navigate("/profile");
         } else {
-          toast.success("Registered successfully!");
+          toast.success("Registered successfully! Please login.");
           navigate("/");
         }
         setAuthOpen(false);
@@ -83,7 +80,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
     setIsLoggedIn(false);
     navigate("/");
   };
@@ -91,7 +88,6 @@ export default function Header() {
   return (
     <>
       <header className="hc-header">
-        {/* Logo */}
         <div className="hc-left">
           <div className="hc-logo" aria-hidden>
             <img className="w-6 h-6 mr-2" src={favicon} alt="fav" />
@@ -99,41 +95,26 @@ export default function Header() {
           </div>
         </div>
 
-       
-        {/* Navigation */}
         <nav className="hc-nav" aria-label="Main navigation">
           <Link to="/" title="Home" className="hc-icon">🏠</Link>
           <Link to="/profile" title="Profile" className="hc-icon">👤</Link>
           <Link to="/dashboard" title="Dashboard" className="hc-icon">📊</Link>
-          <button className="hc-icon" title="Notifications">🔔</button>
-          <Link to="/Chatbot" title="Chatbot" className="hc-icon">🤖</Link> 
+          <Link to="/chatbox" title="Chatbot" className="hc-icon">🤖</Link>
+          <button
+            className="hc-icon hc-bell"
+            onClick={() => navigate("/notifications", { state: { notifications } })}
+          >
+            🔔
+            {notifications.length > 0 && (
+              <span className="hc-badge">{notifications.length}</span>
+            )}
+          </button>
         </nav>
 
-
-        {/* Language + Auth */}
         <div className="hc-right">
-          <div className="hc-lang" onClick={() => setLangOpen(!langOpen)}>
-            <span>{lang}</span>
-            {langOpen && (
-              <ul className="hc-lang-list">
-                {languages.map((L) => (
-                  <li
-                    key={L}
-                    onClick={() => {
-                      setLang(L);
-                      setLangOpen(false);
-                    }}
-                  >
-                    {L}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
           {isLoggedIn ? (
             <>
-              <span className="hc-user">Hello, {userEmail} 👋</span>
+              <span className="hc-user">Hello, {userName} 👋</span>
               <button className="hc-btn hc-login" onClick={handleLogout}>
                 Logout
               </button>
@@ -151,7 +132,7 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Auth Modal */}
+      
       {authOpen && (
         <div className="hc-modal" role="dialog" aria-modal="true">
           <div className="hc-modal-backdrop" onClick={() => setAuthOpen(false)} />
@@ -159,6 +140,17 @@ export default function Header() {
             <button className="hc-modal-close" onClick={() => setAuthOpen(false)}>✕</button>
             <h3>{authMode === "login" ? "Login to WellCompanion" : "Create your account"}</h3>
             <form className="hc-auth-form" onSubmit={handleAuthSubmit}>
+              {authMode === "signup" && (
+                <label>
+                  Name
+                  <input
+                    type="text"
+                    required
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  />
+                </label>
+              )}
               <label>
                 Email
                 <input

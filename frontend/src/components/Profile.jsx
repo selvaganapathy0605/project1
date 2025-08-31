@@ -30,23 +30,29 @@ export default function ProfileForm() {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Please login to save your profile");
-      navigate("/?login=true"); // 👈 Redirect with query param
+      navigate("/login");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/profile", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: token,
+          Authorization: `Bearer ${token}`, 
         },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      toast.success(data.message);
-      navigate("/dashboard");
+
+      if (res.ok) {
+        
+        toast.success(data.message || "Profile saved successfully");
+        navigate("/dashboard");
+      } else {
+        toast.error(data.message || "Error saving profile");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Error saving data");
@@ -66,7 +72,7 @@ export default function ProfileForm() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Personal Information */}
+
           <div>
             <h2 className="text-xl font-semibold mb-4 border-b pb-2 border-gray-400 text-gray-800">
               Personal Information
@@ -74,7 +80,12 @@ export default function ProfileForm() {
             {[
               { label: "Full Name", name: "fullName", type: "text" },
               { label: "Age", name: "age", type: "number" },
-              { label: "Gender", name: "gender", type: "select", options: ["Male", "Female", "Other"] },
+              {
+                label: "Gender",
+                name: "gender",
+                type: "select",
+                options: ["Male", "Female", "Other"],
+              },
               { label: "Contact", name: "contact", type: "tel" },
               { label: "Email", name: "email", type: "email" },
               { label: "Address", name: "address", type: "text" },
@@ -92,11 +103,14 @@ export default function ProfileForm() {
                   >
                     <option value="">Select</option>
                     {field.options.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
                     ))}
                   </select>
                 ) : (
                   <input
+                    required
                     type={field.type}
                     name={field.name}
                     value={formData[field.name]}
@@ -108,7 +122,7 @@ export default function ProfileForm() {
             ))}
           </div>
 
-          {/* Medical Information */}
+          
           <div>
             <h2 className="text-xl font-semibold mb-4 border-b pb-2 border-gray-400 text-gray-800">
               Medical Information
@@ -118,8 +132,16 @@ export default function ProfileForm() {
               { label: "Height (cm)", name: "height", type: "number" },
               { label: "Weight (kg)", name: "weight", type: "number" },
               { label: "Allergies", name: "allergies", type: "text" },
-              { label: "Chronic Condition", name: "chronicCondition", type: "text" },
-              { label: "Medical Condition", name: "medicalCondition", type: "text" },
+              {
+                label: "Chronic Condition",
+                name: "chronicCondition",
+                type: "text",
+              },
+              {
+                label: "Medical Condition",
+                name: "medicalCondition",
+                type: "text",
+              },
             ].map((field) => (
               <div key={field.name} className="flex items-center mb-4">
                 <label className="w-48 font-medium text-gray-700">

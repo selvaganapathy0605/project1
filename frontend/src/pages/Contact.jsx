@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function Contact() {
   return (
-    <div className="wc-page">
+    <div className="wc-page main-page">
       <h1>Contact Us</h1>
       <p>
         We’d love to hear from you! Whether you have questions, feedback, or

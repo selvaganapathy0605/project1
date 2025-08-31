@@ -115,3 +115,22 @@ html, body {
     min-height: 350px;
   }
 }
+
+.community-icon {
+  position: absolute;
+  top: 800px;
+  right: 30px;
+  font-size: 24px;
+  background: #0b1220;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.community-icon:hover {
+  background: #2ecc71;
+  transform: scale(1.1);
+}

@@ -1,4 +1,3 @@
-// src/components/Cards.jsx
 import React from "react";
 import "./Cards.css";
 

@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function Privacy() {
   return (
-    <div className="wc-page wc-privacy">
+    <div className="wc-page wc-privacy main-page">
       <h1>Privacy Policy</h1>
       <p>
         At WellCompanion, your privacy is very important to us. We are committed

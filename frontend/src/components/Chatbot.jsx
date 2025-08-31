@@ -1,137 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
+import axios from "axios";
+
+const AuthContext = React.createContext(null);
 
 export default function Chatbot() {
-  const [disease, setDisease] = useState("");
-  const [info, setInfo] = useState(null);
+  const { user } = useContext(AuthContext) || {};
+  const [input, setInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const chatEndRef = useRef(null);
+  useEffect(() => {
+    if (user && user._id) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/chat/${user._id}`)
+        .then((res) =>
+          setChatHistory(
+            res.data
+              .slice(-15)
+              .map((c) => [
+                { sender: "user", text: c.disease },
+                { sender: "ai", text: c.response },
+              ])
+              .flat()
+          )
+        )
+        .catch((err) => console.error("Error fetching chats:", err));
+    }
+  }, [user]);
 
-  const data = {
-    fever: {
-      medicine: "Paracetamol, Ibuprofen",
-      food: "Light soups, fruits, plenty of water",
-      exercise: "Rest, light stretching only",
-      foodImages: [
-        "https://www.medicalnewstoday.com/content/images/articles/318/318619/five-bottles-of-water.jpg",
-        "http://baltana.com/files/wallpapers-2/Fruit-HD-Wallpapers-03484.jpg",
-      ],
-      exerciseImages: [
-        "https://kemtai.com/wp-content/uploads/2023/03/pexels-shvets-production-8899546.jpg",
-        "https://sunflowercommunities.org/wp-content/uploads/2022/02/dementiaphysicalexercise.jpeg",
-      ],
-    },
-    cold: {
-      medicine: "Antihistamines, Decongestants",
-      food: "Ginger tea, warm broth, citrus fruits",
-      exercise: "Mild yoga, breathing exercises",
-      foodImages: [
-        "http://4.bp.blogspot.com/--6r30eWGmVg/Tkek64O1hdI/AAAAAAAAAMo/wG0PZkuI0lw/s1600/Citrus+Fruits4.jpg",
-        "https://cdn.shopify.com/s/files/1/0687/6050/2545/files/ginger-slices-jagger.webp?v=1688973432",
-      ],
-      exerciseImages: [
-        "https://img.freepik.com/premium-photo/group-meditation-yoga-studio-breathing-exercises-men-women-meditating-breathing-with-ey_737376-2936.jpg",
-        "https://zenfulspirit.com/wp-content/uploads/2015/11/3rd-image1.jpg",
-      ],
-    },
-    headache: {
-      medicine: "Acetaminophen, Ibuprofen",
-      food: "Hydrating foods, nuts, green leafy vegetables",
-      exercise: "Meditation, gentle walking",
-      foodImages: [
-        "https://livelovefruit.com/wp-content/uploads/2015/05/hydrating-foods.jpg",
-        "https://healthwire.pk/wp-content/uploads/2022/08/green-leafy-vegetables.jpg",
-      ],
-      exerciseImages: [
-        "https://static01.nyt.com/images/2022/08/03/well/FITNESS-WALKING-MEALS/FITNESS-WALKING-MEALS-mediumSquareAt3X.jpg",
-        "https://getmegiddy.com/sites/default/files/2022-11/meditation-for-men_social.jpg",
-      ],
-    },
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatHistory]);
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMsg = { sender: "user", text: input };
+    setChatHistory((prev) => [...prev, userMsg]);
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/chat/ask`, {
+        userId: user ? user._id : null,
+        disease: input,
+      });
+
+      const aiMsg = { sender: "ai", text: res.data.response };
+      setChatHistory((prev) => [...prev, aiMsg]);
+    } catch (err) {
+      console.error("Error getting AI response:", err);
+      setChatHistory((prev) => [
+        ...prev,
+        { sender: "ai", text: "⚠️ Error connecting to AI server." },
+      ]);
+    }
+
+    setInput("");
   };
-
-  const handleSearch = () => {
-    const key = disease.trim().toLowerCase();
-    setInfo(data[key] || null);
+  const handleDietPlan = () => {
+    setChatHistory((prev) => [
+      ...prev,
+      { sender: "user", text: "Show me a diet plan" },
+      {
+        sender: "ai",
+        text: "✅ Here’s a sample diet plan:\n- Breakfast: Oats with fruits 🍎\n- Lunch: Brown rice + veggies 🥦\n- Snack: Nuts & Green tea ☕\n- Dinner: Grilled chicken/fish + salad 🥗",
+      },
+    ]);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row gap-6 max-w-5xl w-full">
-        {/* Left Side - Chatbot */}
-        <div className="flex-1 max-w-xl">
-          <h1 className="text-2xl font-bold mb-4 mt-4 text-green-600 text-center">
-            AI Chatbot
-          </h1>
-
-          {/* Input */}
-          <div className="flex gap-3 mb-4">
-            <input
-              type="text"
-              placeholder="Enter your disease..."
-              value={disease}
-              onChange={(e) => setDisease(e.target.value)}
-              className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-lg flex flex-col w-full max-w-3xl h-[70vh]">
+        <h1 className="text-2xl font-bold py-3 px-4 border-b text-green-600 text-center">
+          AI Chatbot
+        </h1>
+        <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3">
+          {chatHistory.map((msg, idx) => (
+            <div key={idx} className="flex flex-col max-w-[75%]">
+              <div
+                className={`px-4 py-2 rounded-lg break-words ${
+                  msg.sender === "user"
+                    ? "bg-green-500 text-white self-end"
+                    : "bg-gray-200 text-black self-start"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+          <div ref={chatEndRef} />
+        </div>
+        <div className="p-3 border-t flex flex-col gap-2">
+          
+          <div className="flex gap-2">
             <button
-              onClick={handleSearch}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+              onClick={handleDietPlan}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
             >
-              Search
+              🍽️ Diet Plan
             </button>
           </div>
 
-          {/* Result */}
-          {disease && (
-            <div className="bg-gray-50 border rounded-lg p-4">
-              <h2 className="text-xl font-semibold capitalize">{disease}</h2>
-              {info ? (
-                <div className="mt-3 space-y-2">
-                  <p>
-                    <b>Medicine:</b> {info.medicine}
-                  </p>
-                  <p>
-                    <b>Food:</b> {info.food}
-                  </p>
-                  <p>
-                    <b>Exercise:</b> {info.exercise}
-                  </p>
-                </div>
-              ) : (
-                <p className="text-red-500 mt-2">No data found</p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Right Side - Images */}
-        {info && (
-          <div className="flex-1">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Food Suggestions</h3>
-              <div className="flex flex-wrap gap-3 mb-6">
-                {info.foodImages.map((src, idx) => (
-                  <img
-                    key={idx}
-                    src={src}
-                    alt="Food"
-                    className="w-40 h-40 object-cover rounded-lg shadow"
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Exercise Suggestions</h3>
-              <div className="flex flex-wrap gap-3">
-                {info.exerciseImages.map((src, idx) => (
-                  <img
-                    key={idx}
-                    src={src}
-                    alt="Exercise"
-                    className="w-40 h-40 object-cover rounded-lg shadow"
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="flex gap-2 mt-2">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            <button
+              onClick={handleSend}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            >
+              Send
+            </button>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

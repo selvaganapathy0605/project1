@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function About() {
   return (
-    <div className="wc-page wc-about">
+    <div className="wc-page wc-about main-page">
       <h1>About</h1>
       <p>
         WellCompanion is a personalized Health & Wellness project that helps

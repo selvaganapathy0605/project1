@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function Careers() {
   return (
-    <div className="wc-page wc-careers">
+    <div className="wc-page wc-careers main-page">
       <h1>Careers at WellCompanion</h1>
       <p>
         At WellCompanion, we’re on a mission to transform health and wellness

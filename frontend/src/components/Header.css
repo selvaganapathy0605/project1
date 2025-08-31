@@ -27,13 +27,13 @@
   z-index: 999;
 }
 
-/* left */
+
 .hc-left { display:flex; align-items:center; gap:12px; }
 .hc-logo { display:flex; align-items:center; gap:10px; font-weight:700; color:var(--text); }
 .hc-logo-leaf { font-size:20px; transform:translateY(1px); }
 .hc-logo-text { font-size:18px; letter-spacing:0.2px; }
 
-/* nav icons center */
+
 .hc-nav { display:flex; gap:10px; align-items:center; }
 .hc-icon {
   background:#f3f4f700; border:#0f172a; padding:30px; border-radius:25px; cursor:pointer; color:var(--muted);
@@ -65,7 +65,6 @@
 }
 .hc-lang-list li:hover { background:#f3f7fb; }
 
-/* buttons */
 .hc-btn {
   padding:8px 12px; border-radius:10px; border: none; cursor:pointer; font-weight:600;
   background:transparent; color:var(--text); box-shadow:none;

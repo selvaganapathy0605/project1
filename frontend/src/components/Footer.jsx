@@ -6,15 +6,15 @@ export default function Footer() {
   return (
     <footer className="fc-footer">
       <div className="fc-inner">
-        {/* Brand */}
+
         <div className="fc-col">
-          <div className="fc-brand">🍃 WellCompanion</div>
+          <div className="fc-brand">❤️ WellCompanion</div>
           <p className="fc-tag">
             Personalized health — simple, private, actionable.
           </p>
         </div>
         
-        {/* Company */}
+ 
         <div className="fc-col">
           <h4>Company</h4>
           <ul>
@@ -24,7 +24,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Support */}
+        
         <div className="fc-col">
           <h4>Support</h4>
           <ul>
@@ -35,32 +35,17 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      
       <div className="fc-bottom">
         <span>© {new Date().getFullYear()} WellCompanion. All rights reserved.</span>
         <div className="fc-social">
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter"
-          >
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
             <FaTwitter />
           </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-          >
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <FaLinkedinIn />
           </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-          >
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <FaInstagram />
           </a>
         </div>

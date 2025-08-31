@@ -3,7 +3,7 @@ import "../components/PageLayout.css";
 
 export default function Terms() {
   return (
-    <div className="wc-page wc-terms">
+    <div className="wc-page wc-terms main-page">
       <h1>Terms & Conditions</h1>
       <p>
         Welcome to WellCompanion! By using our platform, you agree to the
