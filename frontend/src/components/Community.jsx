@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 export default function Community() {
@@ -9,21 +9,24 @@ export default function Community() {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/community`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/community`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setPosts(data);
     } catch (error) {
       console.error("Error fetching posts:", error);
       setError("Failed to load community posts. Please login again.");
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +66,7 @@ export default function Community() {
         <p className="text-red-600 bg-red-100 p-2 rounded mb-4">{error}</p>
       )}
 
-      
+      {/* Posts Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -94,7 +97,6 @@ export default function Community() {
                 </small>
               </div>
 
-              
               <button
                 onClick={() => handleLike(post._id)}
                 className="mt-3 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition w-full"
@@ -110,7 +112,7 @@ export default function Community() {
         )}
       </div>
 
-      
+      {/* Floating Add Button */}
       <button
         onClick={() => setShowForm(true)}
         className="fixed top-30 right-6 bg-blue-600 text-white text-3xl rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-700 transition"
@@ -118,7 +120,7 @@ export default function Community() {
         ➕
       </button>
 
-      
+      {/* Create Post Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-lg w-[90%] max-w-md">

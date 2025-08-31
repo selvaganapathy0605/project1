@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Header.css";
 import { toast } from "react-toastify";
-import favicon from "../assets/favicon.ico"; // or favicon.ico
+import favicon from "../assets/favicon.ico"; 
 
 export default function Header() {
   const navigate = useNavigate();
