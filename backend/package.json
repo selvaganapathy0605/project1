@@ -17,8 +17,15 @@
     "express": "^5.1.0",
     "groq-sdk": "^0.30.0",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
     "mongoose": "^8.17.1",
     "nodemon": "^3.1.10",
     "openai": "^5.15.0"
+=======
+    "mongoose": "^8.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+>>>>>>> 153d00decf72ac44fa11af8673352d523568e3b1
   }
 }
