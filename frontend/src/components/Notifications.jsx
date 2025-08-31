@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../utils/api";
 
 export default function Notifications({ token }) {
   const [notifications, setNotifications] = useState([]);
@@ -8,7 +9,7 @@ export default function Notifications({ token }) {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get(`https://wellcompanion-backend.onrender.com/api/notifications`, {
+        const res = await API.get(`/notifications`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setNotifications(res.data);
@@ -24,8 +25,8 @@ export default function Notifications({ token }) {
 
   const markAsRead = async (id) => {
     try {
-      await axios.put(
-        `https://wellcompanion-backend.onrender.com/api/notifications/${id}/read`,
+      await API.put(
+        `/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -39,7 +40,7 @@ export default function Notifications({ token }) {
   
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`https://wellcompanion-backend.onrender.com/api/notifications/${id}`, {
+      await API.delete(`/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications((prev) => prev.filter((n) => n._id !== id));

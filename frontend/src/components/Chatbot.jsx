@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
+import API from "../utils/api";
 
 const AuthContext = React.createContext(null);
 
@@ -10,8 +11,8 @@ export default function Chatbot() {
   const chatEndRef = useRef(null);
   useEffect(() => {
     if (user && user._id) {
-      axios
-        .get(`https://wellcompanion-backend.onrender.com/api/chat/${user._id}`)
+      API
+        .get(`/chat/${user._id}`)
         .then((res) =>
           setChatHistory(
             res.data
@@ -37,7 +38,7 @@ export default function Chatbot() {
     setChatHistory((prev) => [...prev, userMsg]);
 
     try {
-      const res = await axios.post(`https://wellcompanion-backend.onrender.com/api/chat/ask`, {
+      const res = await API.post(`/chat/ask`, {
         userId: user ? user._id : null,
         disease: input,
       });

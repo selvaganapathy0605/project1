@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import API from "../utils/api";
 
 export default function Community() {
   const [posts, setPosts] = useState([]);
@@ -11,8 +12,8 @@ export default function Community() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get(
-        `https://wellcompanion-backend.onrender.com/api/community`,
+      const { data } = await API.get(
+        `/community`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -33,7 +34,7 @@ export default function Community() {
     if (!formData.title || !formData.body) return;
 
     try {
-      await axios.post(`https://wellcompanion-backend.onrender.com/api/community`, formData, {
+      await API.post(`/community`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormData({ title: "", body: "", tags: "" });
@@ -47,8 +48,8 @@ export default function Community() {
 
   const handleLike = async (postId) => {
     try {
-      await axios.post(
-        `https://wellcompanion-backend.onrender.com/api/community/${postId}/like`,
+      await API.post(
+        `/community/${postId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

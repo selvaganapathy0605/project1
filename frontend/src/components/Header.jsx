@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Header.css";
 import { toast } from "react-toastify";
-import favicon from "../assets/favicon.ico"; 
+import favicon from "../assets/favicon.ico";
+import API from "../utils/api";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -39,25 +40,19 @@ export default function Header() {
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url =
-        authMode === "login"
-          ? `https://wellcompanion-backend.onrender.com/api/auth/login`
-          : `https://wellcompanion-backend.onrender.com/api/auth/register`;
+      const endpoint =
+        authMode === "login" ? "/auth/login" : "/auth/register";
 
       const bodyData =
         authMode === "login"
           ? { email: form.email, password: form.password }
           : { name: form.name, email: form.email, password: form.password };
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyData),
-      });
+      const res = await API.post(endpoint, bodyData); 
 
-      const data = await res.json();
+      if (res.status === 200) {
+        const data = res.data;
 
-      if (res.ok) {
         if (authMode === "login") {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userName", data.user?.name || form.email);
@@ -69,12 +64,12 @@ export default function Header() {
           navigate("/");
         }
         setAuthOpen(false);
-      } else {
-        toast.error(data.message || "Authentication failed");
       }
     } catch (err) {
       console.error(err);
-      toast.warning("Something went wrong");
+      toast.error(
+        err.response?.data?.message || "Authentication failed. Try again."
+      );
     }
   };
 
@@ -96,13 +91,23 @@ export default function Header() {
         </div>
 
         <nav className="hc-nav" aria-label="Main navigation">
-          <Link to="/" title="Home" className="hc-icon">🏠</Link>
-          <Link to="/profile" title="Profile" className="hc-icon">👤</Link>
-          <Link to="/dashboard" title="Dashboard" className="hc-icon">📊</Link>
-          <Link to="/chatbox" title="Chatbot" className="hc-icon">🤖</Link>
+          <Link to="/" title="Home" className="hc-icon">
+            🏠
+          </Link>
+          <Link to="/profile" title="Profile" className="hc-icon">
+            👤
+          </Link>
+          <Link to="/dashboard" title="Dashboard" className="hc-icon">
+            📊
+          </Link>
+          <Link to="/chatbox" title="Chatbot" className="hc-icon">
+            🤖
+          </Link>
           <button
             className="hc-icon hc-bell"
-            onClick={() => navigate("/notifications", { state: { notifications } })}
+            onClick={() =>
+              navigate("/notifications", { state: { notifications } })
+            }
           >
             🔔
             {notifications.length > 0 && (
@@ -121,10 +126,16 @@ export default function Header() {
             </>
           ) : (
             <>
-              <button className="hc-btn hc-login" onClick={() => openAuth("login")}>
+              <button
+                className="hc-btn hc-login"
+                onClick={() => openAuth("login")}
+              >
                 Login
               </button>
-              <button className="hc-btn hc-signup" onClick={() => openAuth("signup")}>
+              <button
+                className="hc-btn hc-signup"
+                onClick={() => openAuth("signup")}
+              >
                 Sign Up
               </button>
             </>
@@ -132,13 +143,24 @@ export default function Header() {
         </div>
       </header>
 
-      
       {authOpen && (
         <div className="hc-modal" role="dialog" aria-modal="true">
-          <div className="hc-modal-backdrop" onClick={() => setAuthOpen(false)} />
+          <div
+            className="hc-modal-backdrop"
+            onClick={() => setAuthOpen(false)}
+          />
           <div className="hc-modal-card">
-            <button className="hc-modal-close" onClick={() => setAuthOpen(false)}>✕</button>
-            <h3>{authMode === "login" ? "Login to WellCompanion" : "Create your account"}</h3>
+            <button
+              className="hc-modal-close"
+              onClick={() => setAuthOpen(false)}
+            >
+              ✕
+            </button>
+            <h3>
+              {authMode === "login"
+                ? "Login to WellCompanion"
+                : "Create your account"}
+            </h3>
             <form className="hc-auth-form" onSubmit={handleAuthSubmit}>
               {authMode === "signup" && (
                 <label>
@@ -157,7 +179,9 @@ export default function Header() {
                   type="email"
                   required
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
                 />
               </label>
               <label>
@@ -166,7 +190,9 @@ export default function Header() {
                   type="password"
                   required
                   value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
                 />
               </label>
               <div className="hc-auth-actions">
@@ -176,9 +202,13 @@ export default function Header() {
                 <button
                   type="button"
                   className="hc-btn hc-ghost"
-                  onClick={() => setAuthMode(authMode === "login" ? "signup" : "login")}
+                  onClick={() =>
+                    setAuthMode(authMode === "login" ? "signup" : "login")
+                  }
                 >
-                  {authMode === "login" ? "Create account" : "Have an account? Login"}
+                  {authMode === "login"
+                    ? "Create account"
+                    : "Have an account? Login"}
                 </button>
               </div>
             </form>
